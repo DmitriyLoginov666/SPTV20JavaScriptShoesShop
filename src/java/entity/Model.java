@@ -19,27 +19,27 @@ public class Model implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String modelName;
-    private String modelSize;
+    private String name;
+    private String brand;
+    private int size;
     private int amount;
-    private double price;
-    private String modelFirm;
-
-    @Override
-    public String toString() {
-        return "Model{" + "id=" + id + ", modelName=" + modelName + ", modelSize=" + modelSize + ", amount=" + amount + ", price=" + price + ", modelFirm=" + modelFirm + '}';
-    }
+    private int price;
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.id);
-        hash = 73 * hash + Objects.hashCode(this.modelName);
-        hash = 73 * hash + Objects.hashCode(this.modelSize);
-        hash = 73 * hash + this.amount;
-        hash = 73 * hash + (int) (Double.doubleToLongBits(this.price) ^ (Double.doubleToLongBits(this.price) >>> 32));
-        hash = 73 * hash + Objects.hashCode(this.modelFirm);
+        hash = 83 * hash + Objects.hashCode(this.id);
+        hash = 83 * hash + Objects.hashCode(this.name);
+        hash = 83 * hash + Objects.hashCode(this.size);
+        hash = 83 * hash + this.amount;
+        hash = 83 * hash + this.price;
+        hash = 83 * hash + Objects.hashCode(this.brand);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "Model{" + "id=" + id + ", name=" + name + ", size=" + size + ", amount=" + amount + ", price=" + price + ", brand=" + brand + '}';
     }
 
     @Override
@@ -57,16 +57,16 @@ public class Model implements Serializable{
         if (this.amount != other.amount) {
             return false;
         }
-        if (Double.doubleToLongBits(this.price) != Double.doubleToLongBits(other.price)) {
+        if (this.price != other.price) {
             return false;
         }
-        if (!Objects.equals(this.modelName, other.modelName)) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.modelSize, other.modelSize)) {
+        if (!Objects.equals(this.size, other.size)) {
             return false;
         }
-        if (!Objects.equals(this.modelFirm, other.modelFirm)) {
+        if (!Objects.equals(this.brand, other.brand)) {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
@@ -83,20 +83,20 @@ public class Model implements Serializable{
         this.id = id;
     }
 
-    public String getModelName() {
-        return modelName;
+    public String getName() {
+        return name;
     }
 
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getModelSize() {
-        return modelSize;
+    public int getSize() {
+        return size;
     }
 
-    public void setModelSize(String modelSize) {
-        this.modelSize = modelSize;
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public int getAmount() {
@@ -107,20 +107,20 @@ public class Model implements Serializable{
         this.amount = amount;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public String getModelFirm() {
-        return modelFirm;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setModelFirm(String modelFirm) {
-        this.modelFirm = modelFirm;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     

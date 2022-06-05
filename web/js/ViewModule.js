@@ -1,8 +1,10 @@
 import {loginModule} from './LoginModule.js';
-import {shoeModule} from './ShoeModule.js';
+import {managerModule} from './ManagerModule.js';
+import {adminModule} from './AdminModule.js';
+import {userModule} from './UserModule.js';
 class ViewModule {
     showLoginForm() {
-        document.getElementById('info').innerHTML = "";
+        document.getElementById("info").innerHTML = '';
         const content = document.getElementById('content');
         content.innerHTML = 
             `<div class="login-container">
@@ -11,28 +13,34 @@ class ViewModule {
                 </div>
                 
                 <div class="container">
-                    <label for="uname"><b>Username</b></label>
-                    <input type="text" id="username" placeholder="Enter Username" name="uname" required> <br>
+                    <form method="post" class="form">
+                    <label><b>Username</b></label>
+                    <input id="username" name="username" type="username" required> <br>
                     
                     <label><b>Password</b></label>
-                    <input type="password" id="password" placeholder="Enter Password" name="psw" required>
+                    <input type="password" id="password" name="password" required>
                     
-                    <button id="login" type="submit">Войти</button>
-                    <button id="registration" type="submit">Зарегистрироваться</button>
+                    <button id="btnLogin" type="submit">Войти</button>
+                    <button id="btnRegistration" type="submit">Зарегистрироваться</button>
                     <label class="remember">
                         <input type="checkbox" checked="checked" name="remember"> Remember me
                     </label>
+                    </form>
                 </div>
             </div>`;
-        const login = document.getElementById('login');
-        login.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginModule.sendCredentials();
-            document.getElementById('logOut').style.display = "unset";
-            document.getElementById('logIn').style.display = "none";
+        document.getElementById('password').addEventListener('keypress',(e)=>{
+            if(e.key === 'Enter'){
+                e.preventDefault();
+                loginModule.sendCredential();
+            }
         });
-        const registration = document.getElementById('registration');
-        registration.addEventListener('click', (e) => {
+        const btnLogin = document.getElementById('btnLogin');
+        btnLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModule.sendCredential();
+        });
+        const btnRegistration = document.getElementById('btnRegistration');
+        btnRegistration.addEventListener('click', (e) => {
             e.preventDefault();
             viewModule.showRegistrationForm();
         });
@@ -52,37 +60,37 @@ class ViewModule {
                 </div>
                 <div class="input-container">
                     <img src="Images/first_name.png" class="input-img"></img>
-                    <input class="input-field" id="first-name" type="text" placeholder="First name" name="fname" required>
+                    <input class="input-field" id="first-name" placeholder="First name" name="firstname" required>
                 </div>
 
                 <div class="input-container">
                     <img src="Images/last_name.png" class="input-img"></img>
-                    <input class="input-field" id="last-name" type="text" placeholder="Last name" name="lname" required>
+                    <input class="input-field" id="last-name" placeholder="Last name" name="lastname" required>
                 </div>
 
                 <div class="input-container">
                     <img src="Images/username.png" class="input-img"></img>
-                    <input class="input-field" id="username" type="text" placeholder="Username" name="uname" required>
+                    <input class="input-field" id="username" placeholder="Username" name="username" required>
                 </div>
                     
                 <div class="input-container">
                     <img src="Images/password.png" class="input-img"></img>
-                    <input class="input-field" id="password" type="password" placeholder="Password" name="psw" required>
+                    <input class="input-field" id="password1" type="password" placeholder="Password" name="password1" required>
+                </div>
+        
+                <div class="input-container">
+                    <img src="Images/password.png" class="input-img"></img>
+                    <input class="input-field" id="password2" type="password" placeholder="Repeat password" name="password2" required>
                 </div>
                 
                 <div class="input-container">
-                    <img src="Images/email.png" class="input-img"></img>
-                    <input class="input-field" id="email" type="text" placeholder="Email" name="email" required>
-                </div>
-            
-                <div class="input-container">
                     <img src="Images/phone.png" class="input-img"></img>
-                    <input class="input-field" id="phone" pattern=".{8,}" type="number" placeholder="Phone" name="phone" required>
+                    <input class="input-field" id="phone" placeholder="Phone" name="phone" required>
                 </div>
             
                 <div class="input-container">
                     <img src="Images/money.png" class="input-img"></img>
-                    <input class="input-field" id="money" type="number" placeholder="$" name="money" required>
+                    <input class="input-field" id="money" placeholder="$" name="money" required>
                 </div>
             
                 <button type="submit" id="register">Зарегистрироваться</button>
@@ -94,37 +102,37 @@ class ViewModule {
         });
     }
     showCreateModel() {
+        document.getElementById("info").innerHTML = '';
         const content = document.getElementById('content');
         content.innerHTML = 
         `<div class="shoe-add-container">
             <div class="top-content">
                 <span class="container-title">Добавление обуви</span>
             </div>
-            <div class="mid-content">
-                <div class="wrap-input100 validate-input" data-validate="Enter name">
-                    <input class="input100" type="text" id="model-name" name="modelName" placeholder="Model name">
+            <form method="post" class="form" id="create_model">  
+                <div class="wrap-input100 validate-input" >
+                    <input class="input100"  id="model-name" name="modelName" placeholder="Model name">
                 </div>
-                <div class="wrap-input100 validate-input" data-validate="Enter firm">
-                    <input class="input100" type="text" id="model-firm" name="modelFirm" placeholder="Model firm">
+                <div class="wrap-input100 validate-input" >
+                    <input class="input100" id="model-brand" name="modelBrand" placeholder="Model brand">
                 </div>
-                <div class="wrap-input100 validate-input" data-validate="Enter size">
-                    <input class="input100" type="number" maxlength="2" id="model-size" name="modelSize" placeholder="Model size">
+                <div class="wrap-input100 validate-input">
+                    <input class="input100"  id="model-size" name="modelSize" placeholder="Model size">
                 </div>
-                <div class="wrap-input100 validate-input" data-validate="Enter price">
-                    <input class="input100" type="number" pattern="[^,\x22]" id="model-price" name="price" placeholder="Price">
+                <div class="wrap-input100 validate-input">
+                    <input class="input100"  id="model-price" name="price" placeholder="Price">
                 </div>
-                <div class="wrap-input100 validate-input" data-validate="Enter amount">
-                    <input class="input100" type="number" id="model-amount" min="1" max="50" name="amount" placeholder="Amount">
+                <div class="wrap-input100 validate-input" >
+                    <input class="input100" id="model-amount" name="amount" placeholder="Amount">
                 </div>
                 <div class="container-login100-form-btn">
-                    <button class="login100-form-btn" id="add-model">Добавить</button>
+                    <input id="btn_add_shoes" type="submit" name="submit" value="Добавить обувь"/>
                 </div>
-            </div>
+            </form>
         </div>`;
-        const addModel = document.getElementById('add-model');
-        addModel.addEventListener('click', (e) => {
+        document.getElementById('create_model').addEventListener('submit',e=>{
             e.preventDefault();
-            shoeModule.createModel();
+            managerModule.createModel();
         });
     }
     showEditModel() {
@@ -140,29 +148,103 @@ class ViewModule {
 
                 </select>
                 <div class="wrap-input100 validate-input" data-validate="Enter name">
-                    <input class="input100" type="text" id="model-name" name="modelName" placeholder="Model name">
+                    <input class="input100" id="model-name" name="modelName" placeholder="Model name">
                 </div>
                 <div class="wrap-input100 validate-input" data-validate="Enter firm">
-                    <input class="input100" type="text" id="model-firm" name="modelFirm" placeholder="Model firm">
+                    <input class="input100" id="model-firm" name="modelFirm" placeholder="Model firm">
                 </div>
                 <div class="wrap-input100 validate-input" data-validate="Enter size">
-                    <input class="input100" type="number" maxlength="2" id="model-size" name="modelSize" placeholder="Model size">
+                    <input class="input100" id="model-size" name="modelSize" placeholder="Model size">
                 </div>
                 <div class="wrap-input100 validate-input" data-validate="Enter price">
-                    <input class="input100" type="number" pattern=".{.2}" id="model-price" name="price" placeholder="Price">
+                    <input class="input100" id="model-price" name="price" placeholder="Price">
                 </div>
                 <div class="wrap-input100 validate-input" data-validate="Enter amount">
-                    <input class="input100" type="number" id="model-amount" min="1" max="50" name="amount" placeholder="Amount">
+                    <input class="input100" id="model-amount" name="amount" placeholder="Amount">
                 </div>
                 <div class="container-login100-form-btn">
-                    <button class="login100-form-btn" type=""submit id="edit-model">Изменить</button>
+                    <button class="login100-form-btn" type="submit" id="edit-model">Изменить</button>
                 </div>
             </div>
         </div>`;
         const editModel = document.getElementById('edit-model');
         editModel.addEventListener('click', (e) => {
             e.preventDefault();
-            shoeModule.getListModels();
+            managerModule.editModel();
+        });
+    }
+    showEditRole(){
+        document.getElementById("info").innerHTML = '';
+        const content = document.getElementById('content');
+        content.innerHTML = 
+            `<div class="shoe-edit-container">
+                <div class="top-content">
+                    <span class="model-edit-title">Изменение роли</span>
+                </div>
+                <div class="mid-content">
+                    <label for="list users">Пользователи</label>
+                    <select name="list users" id="select_users">
+
+                    </select>
+                    <label for="list roles">Роли</label>
+                    <select name="list roles" id="select_roles">
+
+                    </select>
+                    <div class="container-login100-form-btn">
+                        <button class="login100-form-btn" type="submit" id="edit-role">Изменить роль</button>
+                    </div>
+                </div>
+             </div>`;
+        
+        document.getElementById('edit-role').addEventListener('click',(e)=>{
+            e.preventDefault();
+            adminModule.setNewRole();
+        });
+    }
+    showProfile(){
+        document.getElementById("info").innerHTML = '';
+        let authUser = JSON.parse(sessionStorage.getItem('user'));
+        const content = document.getElementById('content');
+        content.innerHTML =`<div class="registration-container">
+                <div class="registration-heading">
+                    <svg xmlns="http://www.w3.org/2000/svg">
+                        <filter id="motion-blur-filter" filterUnits="userSpaceOnUse">
+                            <feGaussianBlur stdDeviation="100 0"></feGaussianBlur>
+                        </filter>
+                    </svg>
+                    <h2 filter-content="S">Изменение профиля</h2>
+                </div>
+                <div class="input-container">
+                    <img src="Images/first_name.png" class="input-img"></img>
+                    <input class="input-field" id="firstname" type="text" placeholder="First name" name="firstname" value="${authUser.firstname}" required>
+                </div>
+
+                <div class="input-container">
+                    <img src="Images/last_name.png" class="input-img"></img>
+                    <input class="input-field" id="lastname" type="text" placeholder="Last name" name="lastname" value="${authUser.lastname}" required>
+                </div>
+
+                <div class="input-container">
+                    <img src="Images/username.png" class="input-img"></img>
+                    <input class="input-field" id="login" type="text" placeholder="Login" name="login" readonly value="${authUser.username}" required>
+                </div>                   
+                
+                <div class="input-container">
+                    <img src="Images/phone.png" class="input-img"></img>
+                    <input class="input-field" id="phone" type="text" placeholder="Phone" name="phone" value="${authUser.phone}" required>
+                </div>
+            
+                <div class="input-container">
+                    <img src="Images/money.png" class="input-img"></img>
+                    <input class="input-field" id="money" type="number" placeholder="$" name="money" value="${authUser.money}" required>
+                </div>
+            
+                <button type="submit" id="edit_profile">Изменить</button>
+            </div>`;
+        const edit_profile = document.getElementById('edit_profile');
+        edit_profile.addEventListener('click', (e)=>{
+            e.preventDefault();
+            userModule.editProfile();
         });
     }
 }

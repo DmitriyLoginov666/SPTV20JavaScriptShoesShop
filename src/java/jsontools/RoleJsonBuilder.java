@@ -5,7 +5,7 @@
  */
 package jsontools;
 
-import entity.User;
+import entity.Role;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -14,15 +14,11 @@ import javax.json.JsonObjectBuilder;
  *
  * @author user
  */
-public class UserJsonBuilder {
-    public JsonObject getJsonUser(User user){
+public class RoleJsonBuilder {
+    public JsonObject getJsonRole(Role role){
         JsonObjectBuilder job=Json.createObjectBuilder();
-        job.add("id", user.getId());
-        job.add("firstname", user.getFirstName());
-        job.add("lastname", user.getLastName());
-        job.add("phone", user.getPhone());
-        job.add("username", user.getUsername());
-        job.add("money", user.getMoney());
+        job.add("id", role.getId());
+        job.add("roleName", role.getRoleName());
         return job.build();
     }
 }

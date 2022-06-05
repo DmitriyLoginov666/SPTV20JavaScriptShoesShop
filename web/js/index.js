@@ -1,118 +1,161 @@
-import {loginModule} from './LoginModule.js';
-import { shoeModule } from './ShoeModule.js';
-import {viewModule} from './ViewModule.js';
-export {checkRole};
 
-const buyModel = document.getElementById('buy-model');
-const createModel = document.getElementById('create-model');
-const createUser = document.getElementById('create-user');
-const editModel = document.getElementById('edit-model');
-const editUser = document.getElementById('edit-user');
-hideMenu();
-function hideMenu() {
-    buyModel.style.display = "none";
-    createModel.style.display = "none";
-    createUser.style.display = "none";
-    editModel.style.display = "none";
-    editUser.style.display = "none";
-}
-const info = document.getElementById('info');
-const btnLogin = document.getElementById('logIn');
-const btnLogout = document.getElementById('logOut');
-btnLogin.addEventListener('click', (e) => {
+
+import {loginModule} from './LoginModule.js';
+import {viewModule} from './ViewModule.js';
+import {adminModule} from './AdminModule.js';
+import {userModule} from './UserModule.js';
+
+export{checkMenuPanel};
+
+const catalog_model = document.getElementById("catalog_model");
+catalog_model.addEventListener("click",(e)=>{
     e.preventDefault();
-    viewModule.showLoginForm();
+    userModule.getListModel();
 });
-btnLogout.addEventListener('click', (e) => {
-    e.preventDefault();
-    loginModule.logout();
-    btnLogout.style.display = "none";
-    btnLogin.style.display = "unset";
-    info.innerHTML = "Вы вышли из аккаунта!";
-    hideMenu();
-});
-function checkRole() {
-    let role = null;
-    if(sessionStorage.getItem('user') === null) {
-        if(!buyModel.style.display === "none") {
-            buyModel.style.display = "none";
-        }
-        if(!createModel.style.display === "none") {
-            createModel.style.display = "none";
-        }
-        if(!createUser.style.display === "none") {
-            createUser.style.display = "none";
-        }
-        if(!editModel.style.display === "none") {
-            editModel.style.display = "none";
-        }
-        if(!editUser.style.display === "none") {
-            editUser.style.display = "none";
-        }
-        return;
-    }
-    // console.log(JSON.parse(sessionStorage.getItem('user')));
-    if(JSON.parse(sessionStorage.getItem('user')).role === "ADMINISTRATOR") {
-        if(buyModel.style.display === "none") {
-            buyModel.style.display = "unset";
-        }
-        if(createModel.style.display === "none") {
-            createModel.style.display = "unset";
-        }
-        if(createUser.style.display === "none") {
-            createUser.style.display = "unset";
-        }
-        if(editModel.style.display === "none") {
-            editModel.style.display = "unset";
-        }
-        if(editUser.style.display === "none") {
-            editUser.style.display = "unset";
-        }
-        return;
-    }
-    if(JSON.parse(sessionStorage.getItem('user')).role === "MANAGER") {
-        if(buyModel.style.display === "none") {
-            buyModel.style.display = "unset";
-        }
-        if(createModel.style.display === "none") {
-            createModel.style.display = "unset";
-        }
-        if(createUser.style.display === "none") {
-            createUser.style.display = "unset";
-        }
-        if(editModel.style.display === "none") {
-            editModel.style.display = "unset";
-        }
-        if(editUser.style.display === "none") {
-            editUser.style.display = "none";
-        }
-        return;
-    }
-    if(JSON.parse(sessionStorage.getItem('user')).role === "USER") {
-        if(buyModel.style.display === "none") {
-            buyModel.style.display = "unset";
-        }
-        if(createModel.style.display === "none") {
-            createModel.style.display = "none";
-        }
-        if(createUser.style.display === "none") {
-            createUser.style.display = "unset";
-        }
-        if(editModel. style.display === "none") {
-            editModel.style.display = "none";
-        }
-        if(editUser.style.display === "none") {
-            editUser.style.display = "none";
-        }
-        return;
-    }
-}
-createModel.addEventListener('click', (e) => {
+const create_model = document.getElementById("create_model");
+create_model.addEventListener("click",(e)=>{
     e.preventDefault();
     viewModule.showCreateModel();
 });
-editModel.addEventListener('click', (e) => {
+
+const edit_model = document.getElementById("edit_model");
+edit_model.addEventListener("click",(e)=>{
     e.preventDefault();
     viewModule.showEditModel();
-    shoeModule.getListModels();
 });
+const edit_user = document.getElementById("edit_user");
+edit_user.addEventListener("click",(e)=>{
+    e.preventDefault();
+    viewModule.showProfile();
+});
+const edit_role = document.getElementById("edit_role");
+edit_role.addEventListener("click",(e)=>{
+    e.preventDefault();
+    viewModule.showEditRole(adminModule.getUsersMap(), adminModule.getRoles());
+});
+const login = document.getElementById("login");
+login.addEventListener("click", (e) => {
+    e.preventDefault();
+    viewModule.showLoginForm();
+});
+const logout = document.getElementById("logout");
+logout.addEventListener("click",(e)=>{
+    e.preventDefault();
+    loginModule.sendLogout();
+});
+
+
+function checkMenuPanel(){
+    let role = sessionStorage.getItem('role');
+    if(role===null){
+        if(document.getElementById('catalog_model').classList.contains('hidden')){
+            document.getElementById('catalog_model').classList.remove('hidden');
+        }
+        if(!document.getElementById('buy_model').classList.contains('hidden')){
+            document.getElementById('buy_model').classList.add('hidden');
+        }
+        if(!document.getElementById('create_model').classList.contains('hidden')){
+            document.getElementById('create_model').classList.add('hidden');
+        }
+        if(!document.getElementById('edit_model').classList.contains('hidden')){
+            document.getElementById('edit_model').classList.add('hidden');
+        }
+        if(!document.getElementById('edit_user').classList.contains('hidden')){
+            document.getElementById('edit_user').classList.add('hidden');
+        }
+        if(!document.getElementById('edit_role').classList.contains('hidden')){
+            document.getElementById("edit_role").classList.add('hidden');
+        }
+        if(document.getElementById('login').classList.contains('hidden')){
+            document.getElementById("login").classList.remove('hidden');
+        }
+        if(!document.getElementById('logout').classList.contains('hidden')){
+            document.getElementById("logout").classList.add('hidden');
+        }
+        return;
+    }
+    role = JSON.parse(role);
+    if(role.roleName === 'USER'){
+        if(document.getElementById('catalog_model').classList.contains('hidden')){
+            document.getElementById('catalog_model').classList.remove('hidden');
+        }
+        if(document.getElementById('buy_model').classList.contains('hidden')){
+            document.getElementById('buy_model').classList.remove('hidden');
+        }
+        if(!document.getElementById('create_model').classList.contains('hidden')){
+            document.getElementById('create_model').classList.add('hidden');
+        }
+        if(!document.getElementById('edit_model').classList.contains('hidden')){
+            document.getElementById('edit_model').classList.add('hidden');
+        }
+        if(document.getElementById('edit_user').classList.contains('hidden')){
+            document.getElementById('edit_user').classList.remove('hidden');
+        }
+        if(!document.getElementById('edit_role').classList.contains('hidden')){
+            document.getElementById("edit_role").classList.add('hidden');
+        }
+        if(!document.getElementById('login').classList.contains('hidden')){
+            document.getElementById("login").classList.add('hidden');
+        }
+        if(document.getElementById('logout').classList.contains('hidden')){
+            document.getElementById("logout").classList.remove('hidden');
+        }
+        return;
+    }
+    if(role.roleName === 'MANAGER'){
+        if(document.getElementById('catalog_model').classList.contains('hidden')){
+            document.getElementById('catalog_model').classList.remove('hidden');
+        }
+        if(document.getElementById('buy_model').classList.contains('hidden')){
+            document.getElementById('buy_model').classList.remove('hidden');
+        }
+        if(document.getElementById('create_model').classList.contains('hidden')){
+            document.getElementById('create_model').classList.remove('hidden');
+        }
+        if(document.getElementById('edit_model').classList.contains('hidden')){
+            document.getElementById('edit_model').classList.remove('hidden');
+        }
+        if(document.getElementById('edit_user').classList.contains('hidden')){
+            document.getElementById('edit_user').classList.remove('hidden');
+        }
+        if(!document.getElementById('edit_role').classList.contains('hidden')){
+            document.getElementById("edit_role").classList.add('hidden');
+        }
+        if(!document.getElementById('login').classList.contains('hidden')){
+            document.getElementById("login").classList.add('hidden');
+        }
+        if(document.getElementById('logout').classList.contains('hidden')){
+            document.getElementById("logout").classList.remove('hidden');
+        }
+        return;
+    }
+    if(role.roleName === 'ADMINISTRATOR'){
+        if(document.getElementById('catalog_model').classList.contains('hidden')){
+            document.getElementById('catalog_model').classList.remove('hidden');
+        }
+        if(document.getElementById('buy_model').classList.contains('hidden')){
+            document.getElementById('buy_model').classList.remove('hidden');
+        }
+        if(document.getElementById('create_model').classList.contains('hidden')){
+            document.getElementById('create_model').classList.remove('hidden');
+        }
+        if(document.getElementById('edit_model').classList.contains('hidden')){
+            document.getElementById('edit_model').classList.remove('hidden');
+        }
+        if(document.getElementById('edit_user').classList.contains('hidden')){
+            document.getElementById('edit_user').classList.remove('hidden');
+        }
+        if(document.getElementById('edit_role').classList.contains('hidden')){
+            document.getElementById("edit_role").classList.remove('hidden');
+        }
+        if(!document.getElementById('login').classList.contains('hidden')){
+            document.getElementById("login").classList.add('hidden');
+        }
+        if(document.getElementById('logout').classList.contains('hidden')){
+            document.getElementById("logout").classList.remove('hidden');
+        }
+        return;
+    }
+    }
+
+checkMenuPanel();

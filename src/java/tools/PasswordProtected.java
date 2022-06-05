@@ -17,10 +17,10 @@ import javax.crypto.spec.PBEKeySpec;
 
 /**
  *
- * @author Melnikov
+ * @author user
  */
 public class PasswordProtected {
-    public String getProtectedPassword(String password, String salt){
+    public String passwordEncript(String password, String salt){
         KeySpec spec = new PBEKeySpec(password.toCharArray(),salt.getBytes(),65536,128);
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -39,4 +39,5 @@ public class PasswordProtected {
         random.nextBytes(salt);
         return new BigInteger(salt).toString(16);
     }
+    
 }

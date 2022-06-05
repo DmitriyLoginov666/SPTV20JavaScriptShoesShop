@@ -1,6 +1,9 @@
 package session;
 
 import entity.History;
+import entity.User;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,6 +25,17 @@ public class HistoryFacade extends AbstractFacade<History> {
 
     public HistoryFacade() {
         super(History.class);
+    }
+    
+    
+            public List<History> historyOfPurchaseModel(User user) {
+        try {
+            return em.createQuery("SELECT h FROM History h WHERE h.user = :user")
+                    .setParameter("user", user)
+                    .getResultList();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
     
 }

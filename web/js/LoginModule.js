@@ -1,100 +1,110 @@
-import {checkRole} from './index.js';
+import {checkMenuPanel} from './index.js';
 import {viewModule} from './ViewModule.js';
 
-const buyModel = document.getElementById('buy-model');
-const createModel = document.getElementById('create-model');
-const createUser = document.getElementById('create-user');
-const editModel = document.getElementById('edit-model');
-const editUser = document.getElementById('edit-user');
 
 class LoginModule {
-    sendCredentials() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const credential = {
-            "username": username,
-            "password": password,
-        };
-        //Посылаем запрос а с паттерном 'login', методом POST и телом body в формате JSON
-        // возвращается обещание (Promise) со статусом "ожидание"
-        let promise = fetch('login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset:utf8'
-            },
-            credentials: 'include',
-            body: JSON.stringify(credential)
-        });
-        promise.then(response => response.json())
-        .then(response => {
-                    document.getElementById('info').innerHTML = response.info;
-                    sessionStorage.setItem('user', JSON.stringify(response.user));
-                    document.getElementById('content').innerHTML = "";
-                    checkRole();
-                })
-                .catch(error => {
-                    document.getElementById('info').innerHTML = response.info;
-                });
-    }
-    logout() {
-        let promiseLogout = fetch('logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/html;charset:utf8'
-            },
-            credentials: 'include'
-        });
-        promiseLogout.then(response => response.json())
-            .then(response => {
-                document.getElementById("info").innerHTML = response.info;
-                if(!response.auth) {
-                    if(sessionStorage.getItem('user')) {
+ sendCredential(){
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const credential = {
+        "username": username,
+        "password": password
+    };
+    let promise = fetch('login',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset:utf8'
+        },
+        credentials: 'include',
+        body: JSON.stringify(credential)
+    });
+    promise.then(response=> response.json())
+       .then(response =>{
+           if(response.auth){
+               sessionStorage.setItem('token',JSON.stringify(response.token));
+               sessionStorage.setItem('user',JSON.stringify(response.user));
+               sessionStorage.setItem('role',JSON.stringify(response.role));
+               sessionStorage.setItem('model',JSON.stringify(response.model));
+               checkMenuPanel();
+               viewModule.showProfile();
+               document.getElementById('info').innerHTML = response.info;
+           }else{
+               checkMenuPanel();
+               document.getElementById('info').innerHTML = response.info;
+           }
+       })
+       .catch( error =>{
+           document.getElementById('info').innerHTML = "Ошибка запроса (sendCredential): "+error;
+           document.getElementById('content').innerHTML = "";
+       });
+ }
+ sendLogout(){
+     let promise = fetch('logout', {
+         method: 'GET'
+     });
+     promise.then(response => response.json())
+             .then(response => {
+                 if(!response.auth){
+                     if(sessionStorage.getItem('token')!== null){
+                        sessionStorage.removeItem('token');
+                     }
+                     if(sessionStorage.getItem('user')!== null){
                         sessionStorage.removeItem('user');
-                    }
-                    checkRole();
-                }
-            });
-    }
-    registration() {
-        const firstName = document.getElementById('first-name').value;
-        const lastName = document.getElementById('last-name').value;
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const phone = document.getElementById('phone').value;
-        const money = document.getElementById('money').value;
-        const newUser = {
-            "firstName": firstName,
-            "lastName": lastName,
-            "username": username,
-            "password": password,
-            "phone": phone,
-            "money": money,
-        }
-        let promiseRegistration = fetch('registration', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset:utf8'
-            },
-            credentials: 'include',
-            body: JSON.stringify(newUser)
-        });
-        promiseRegistration.then(response => response.json())
-                .then(response => {
-                    if(response.money === 0) {
-                        document.getElementById('info').innerHTML = "Введите сумму больше нуля!";
-                        return;
-                    }
-                    document.getElementById('info').innerHTML = response.info;
-                    sessionStorage.setItem('newUser', JSON.stringify(response.newUser));
+                     }
+                     if(sessionStorage.getItem('role')!== null){
+                        sessionStorage.removeItem('role');
+                     }
+                    checkMenuPanel();
                     viewModule.showLoginForm();
-                })
-                .catch(error => {
-                    if(firstName === "" || lastName === "" || username === "" || password === "" || phone === "" || money === "") {
-                        document.getElementById('info').innerHTML = "Заполните все поля!";
-                        return;
-                    }
-                    document.getElementById('info').innerHTML = error;
-                });
+                    document.getElementById('info').innerHTML = response.info;
+                 }
+     });
+     
+ }
+    registration() {
+    const firstname = document.getElementById('first-name').value;
+    const lastname = document.getElementById('last-name').value;
+     const username = document.getElementById('username').value;
+     const phone = document.getElementById('phone').value;
+     const money = document.getElementById('money').value;
+     const password1 = document.getElementById('password1').value;
+     const password2 = document.getElementById('password2').value;
+     if(password1 !== password2){
+         document.getElementById('info').innerHTML = 'Пароли не совпадают';
+         document.getElementById('password1').innerHTML = "";
+         document.getElementById('password2').innerHTML = "";
+         return;
+     }
+     const user = {
+         "firstname": firstname,
+         "lastname": lastname,
+         "phone": phone,
+         "username": username,
+         "money": money,
+         "password": password1
+     };
+     let promise = fetch('registration',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset:utf8'
+        },
+        credentials: 'include',
+        body: JSON.stringify(user)
+    });
+    promise.then(respnose => respnose.json())
+            .then(response =>{
+                if(response.status){
+                    viewModule.showLoginForm();
+                    document.getElementById('info').innerHTML = response.info;
+                }else{
+                    viewModule.showRegistrationForm();
+                    document.getElementById('info').innerHTML = response.info;
+                }
+            })
+            .catch(error =>{
+                document.getElementById('info').innerHTML = "Ошибка запроса (registration): "+error;
+                document.getElementById('content').innerHTML = "";
+            });
     }
 }
 const loginModule = new LoginModule();
