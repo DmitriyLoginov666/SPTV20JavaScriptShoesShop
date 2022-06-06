@@ -15,11 +15,11 @@ public class ModelJsonBuilder {
     public JsonObject getJsonModel(Model model){
         JsonObjectBuilder job = Json.createObjectBuilder();
         job.add("id", model.getId());
-        job.add("model-name", model.getName());
-        job.add("model-brand",model.getBrand());
-        job.add("model-price", model.getPrice());
-        job.add("model-size", model.getSize());
-        job.add("model-amount", model.getAmount());
+        job.add("name", model.getName());
+        job.add("brand",model.getBrand());
+        job.add("price", model.getPrice());
+        job.add("size", model.getSize());
+        job.add("amount", model.getAmount());
         return job.build();
     }
     public JsonArray getJsonArrayModel(List<Model> listModelData){

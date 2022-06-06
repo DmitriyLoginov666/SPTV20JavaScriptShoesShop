@@ -32,9 +32,9 @@ import tools.PasswordProtected;
  * @author user
  */
 @WebServlet(name = "UserServlet", urlPatterns = {
-    "/getListModel",
     "/editProfile",
-    "/buyShoe"
+    "/buyShoe",
+    "/getListBuyModels"
     
 })
 public class UserServlet extends HttpServlet {
@@ -88,8 +88,19 @@ public class UserServlet extends HttpServlet {
         }
         String path = request.getServletPath();
         switch (path) {
+            case "/getListBuyModels"://Выдача списка обуви
+                List<Model> models = modelFacade.findAll();
+                ModelJsonBuilder mjb = new ModelJsonBuilder();
+                if(!models.isEmpty()) {
+                    job.add("status", true)
+                        .add("options", mjb.getJsonArrayModel(models));
+                }
+                try(PrintWriter out = response.getWriter()) {
+                    out.println(job.build().toString());
+                }
+                break;
             case "/buyShoe":
-                JsonReader jsonReader = Json.createReader(request.getReader());
+                JsonReader jsonReader = Json.createReader(request.getReader());//Покупка обуви
                 JsonObject jo = jsonReader.readObject();
                 String id = jo.getString("id");
                 Model currentModel = modelFacade.find(Long.parseLong(id));
@@ -99,6 +110,7 @@ public class UserServlet extends HttpServlet {
                     try (PrintWriter out = response.getWriter()) {
                        out.println(job.build().toString());
                     }
+                    break;
                 }
                 currentModel.setAmount(currentModel.getAmount()-1);
                 authUser.setMoney(Integer.toString(Integer.parseInt(authUser.getMoney())-currentModel.getPrice()));
@@ -115,26 +127,8 @@ public class UserServlet extends HttpServlet {
                    out.println(job.build().toString());
                 } 
                 break;
-            case "/getListModel":
-                List<Model> Model = modelFacade.findAll();
-                if(Model.isEmpty()){
-                    job.add("Model", "");
-                    job.add("status", true).add("info", "Список пуст");
-                    try (PrintWriter out = response.getWriter()) {
-                      out.println(job.build().toString());
-                    } 
-                    break;
-                }
-                ModelJsonBuilder mjb = new ModelJsonBuilder();
-                job.add("Model", mjb.getJsonArrayModel(Model));
-                job.add("status", true).add("info", "");
-                try (PrintWriter out = response.getWriter()) {
-                  out.println(job.build().toString());
-                } 
-                break;
-
             case "/editProfile":
-                JsonReader jsonReader1 = Json.createReader(request.getReader());
+                JsonReader jsonReader1 = Json.createReader(request.getReader());//Изменнение профиля
                 JsonObject jo1 = jsonReader1.readObject();
                 int id1 = jo1.getInt("id");
                 String newFirstname = jo1.getString("newFirstname","");
@@ -147,12 +141,12 @@ public class UserServlet extends HttpServlet {
                     job.add("status", false);
                     try (PrintWriter out = response.getWriter()) {
                        out.println(job.build().toString());
-                    } 
+                    }
                 }
                 newUser.setFirstName(newFirstname);
                 newUser.setLastName(newLastname);
                 newUser.setPhone(newPhone);
-                newUser.setMoney(newMoney);
+                newUser.setMoney(Integer.toString(Integer.parseInt(authUser.getMoney())+Integer.parseInt(newMoney)));
                 userFacade.edit(newUser);
                 session.setAttribute("authUser", newUser);
                 job.add("info", "Профиль пользователя "+newUser.getUsername()+" успешно изменен");

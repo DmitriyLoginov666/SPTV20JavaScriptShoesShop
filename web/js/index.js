@@ -4,13 +4,14 @@ import {loginModule} from './LoginModule.js';
 import {viewModule} from './ViewModule.js';
 import {adminModule} from './AdminModule.js';
 import {userModule} from './UserModule.js';
+import {managerModule} from './ManagerModule.js';
 
 export{checkMenuPanel};
 
-const catalog_model = document.getElementById("catalog_model");
-catalog_model.addEventListener("click",(e)=>{
+const buy_model = document.getElementById("buy_model");
+buy_model.addEventListener("click",(e)=>{
     e.preventDefault();
-    userModule.getListModel();
+    userModule.getListBuyModels();
 });
 const create_model = document.getElementById("create_model");
 create_model.addEventListener("click",(e)=>{
@@ -21,7 +22,7 @@ create_model.addEventListener("click",(e)=>{
 const edit_model = document.getElementById("edit_model");
 edit_model.addEventListener("click",(e)=>{
     e.preventDefault();
-    viewModule.showEditModel();
+    managerModule.getListModels();
 });
 const edit_user = document.getElementById("edit_user");
 edit_user.addEventListener("click",(e)=>{
@@ -48,9 +49,6 @@ logout.addEventListener("click",(e)=>{
 function checkMenuPanel(){
     let role = sessionStorage.getItem('role');
     if(role===null){
-        if(document.getElementById('catalog_model').classList.contains('hidden')){
-            document.getElementById('catalog_model').classList.remove('hidden');
-        }
         if(!document.getElementById('buy_model').classList.contains('hidden')){
             document.getElementById('buy_model').classList.add('hidden');
         }
@@ -76,9 +74,6 @@ function checkMenuPanel(){
     }
     role = JSON.parse(role);
     if(role.roleName === 'USER'){
-        if(document.getElementById('catalog_model').classList.contains('hidden')){
-            document.getElementById('catalog_model').classList.remove('hidden');
-        }
         if(document.getElementById('buy_model').classList.contains('hidden')){
             document.getElementById('buy_model').classList.remove('hidden');
         }
@@ -103,9 +98,6 @@ function checkMenuPanel(){
         return;
     }
     if(role.roleName === 'MANAGER'){
-        if(document.getElementById('catalog_model').classList.contains('hidden')){
-            document.getElementById('catalog_model').classList.remove('hidden');
-        }
         if(document.getElementById('buy_model').classList.contains('hidden')){
             document.getElementById('buy_model').classList.remove('hidden');
         }
@@ -130,9 +122,6 @@ function checkMenuPanel(){
         return;
     }
     if(role.roleName === 'ADMINISTRATOR'){
-        if(document.getElementById('catalog_model').classList.contains('hidden')){
-            document.getElementById('catalog_model').classList.remove('hidden');
-        }
         if(document.getElementById('buy_model').classList.contains('hidden')){
             document.getElementById('buy_model').classList.remove('hidden');
         }

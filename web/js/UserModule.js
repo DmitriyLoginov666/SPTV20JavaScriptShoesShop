@@ -3,30 +3,48 @@ class UserModule{
     
 
     
-    getListShoes(){
-        let promiseGetListShoes = fetch('getListShoes',{
-            method: 'POST',
+    
+    getListBuyModels() {
+        let promiseListModels = fetch('getListBuyModels', {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json;charset:utf8'
-            },
-            credentials: 'include'
+            }
         });
-        promiseGetListShoes.then(response => response.json())
-                          .then(response =>{
-                              if(response.status){
-                                  document.getElementById('info').innerHTML = response.info;
-                                  viewModule.showListShoes(response.Model);
-                              }else{
-                                  document.getElementById('info').innerHTML = response.info;
-                              }
-                          })
-                          .catch(error => {
-                              document.getElementById('info').innerHTML = "Ошибка сервера (getListShoes)"+error;
-                          });
-    }
+        promiseListModels.then(response => response.json())
+                .then(response => {
+                    if(response.status) {
+                        viewModule.showBuyModel();
+                        let modelSelect = document.getElementById('select_models');
+                        modelSelect.options.length = 0;
+                        let option = null;
+                        option = document.createElement('option');
+                        option.text = "--Выберите модель--";
+                        option.value = '';
+                        modelSelect.add(option);
+                        for (let i = 0; i < response.options.length; i++) {
+                            option = document.createElement('option');
+                            option.text = response.options[i].name + ' // ' + response.options[i].brand + ' // ' + response.options[i].price + '$';
+                            option.value = response.options[i].id;
+                            modelSelect.add(option);
+                        }
+                    }else {
+                        let modelSelect = document.getElementById('select_models');
+                        modelSelect.options.length = 0;
+                        let option = null;
+                        option = document.createElement('option');
+                        option.text = "Список моделей пуст...";
+                        option.value = '';
+                        document.getElementById('info').innerHTML = response.info;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('info').innerHTML = "insertListModels" + error.info;
+                });
+    }    
     
     buyShoe(){
-        const id = document.getElementById('id').value;
+        const id = document.getElementById('select_models').value;
         const buyShoe = {
             "id":id
         };

@@ -385,6 +385,7 @@ input {
     border: none;
 }
 
+
 button, input {
     overflow: visible;
 }
@@ -491,7 +492,7 @@ button {
     font-style: italic;
     font-size: 17px;
     text-align: center;
-    background-color: rgb(231, 190, 240);
+    background-color:  -webkit-linear-gradient(top, #656568, #ffffff); 
 }
 
 .hover{

@@ -6,15 +6,19 @@
 package servlets;
 
 import entity.Model;
+import entity.Role;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +34,10 @@ import session.UserRolesFacade;
  */
 @WebServlet(name = "ManagerServlet", urlPatterns = {
     "/addModel",
-    "/editModel"
+    "/editModel",
+    "/getListModels"
 })
+@MultipartConfig
 public class ManagerServlet extends HttpServlet {
     @EJB private ModelFacade modelFacade;
     @EJB private UserRolesFacade userRolesFacade;
@@ -70,11 +76,11 @@ public class ManagerServlet extends HttpServlet {
         String path = request.getServletPath();
         switch(path) {
             case "/addModel":
-                String name = request.getParameter("model-name");
-                String brand = request.getParameter("model-brand");
-                String size = request.getParameter("model-size");
-                String price = request.getParameter("model-price");
-                String amount = request.getParameter("model-amount");
+                String name = request.getParameter("name");
+                String brand = request.getParameter("brand");
+                String size = request.getParameter("size");
+                String price = request.getParameter("price");
+                String amount = request.getParameter("amount");
                 Model model = new Model();
                 model.setName(name);
                 model.setBrand(brand);
@@ -95,13 +101,13 @@ public class ManagerServlet extends HttpServlet {
                 String newName = jo1.getString("newName","");
                 String newBrand = jo1.getString("newBrand","");
                 String newSize = jo1.getString("newSize","");
-                String newQuantity = jo1.getString("newQuantity","");
+                String newAmount = jo1.getString("newAmount","");
                 String newPrice = jo1.getString("newPrice","");
                 Model newModel = modelFacade.find(Long.parseLong(id1));
                 newModel.setName(newName);
                 newModel.setBrand(newBrand);
                 newModel.setSize(Integer.parseInt(newSize));
-                newModel.setAmount(Integer.parseInt(newQuantity));
+                newModel.setAmount(Integer.parseInt(newAmount));
                 newModel.setPrice(Integer.parseInt(newPrice));
                 modelFacade.edit(newModel);
                 job.add("info", "Обувь успешно изменена");
@@ -111,6 +117,17 @@ public class ManagerServlet extends HttpServlet {
                    out.println(job.build().toString());
                 } 
                 
+                break;
+            case "/getListModels":
+                List<Model> models = modelFacade.findAll();
+                ModelJsonBuilder mjb = new ModelJsonBuilder();
+                if(!models.isEmpty()) {
+                    job.add("status", true)
+                        .add("options", mjb.getJsonArrayModel(models));
+                }
+                try(PrintWriter out = response.getWriter()) {
+                    out.println(job.build().toString());
+                }
                 break;
         }
     }

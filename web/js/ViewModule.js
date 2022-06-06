@@ -109,28 +109,28 @@ class ViewModule {
             <div class="top-content">
                 <span class="container-title">Добавление обуви</span>
             </div>
-            <form method="post" class="form" id="create_model">  
+            <form method="post" class="form" id="form_model">  
                 <div class="wrap-input100 validate-input" >
-                    <input class="input100"  id="model-name" name="modelName" placeholder="Model name">
+                    <input class="input100"  id="name" name="name" placeholder="Model name">
                 </div>
                 <div class="wrap-input100 validate-input" >
-                    <input class="input100" id="model-brand" name="modelBrand" placeholder="Model brand">
+                    <input class="input100" id="brand" name="brand" placeholder="Model brand">
                 </div>
                 <div class="wrap-input100 validate-input">
-                    <input class="input100"  id="model-size" name="modelSize" placeholder="Model size">
+                    <input class="input100"  id="size" name="size" placeholder="Model size">
                 </div>
                 <div class="wrap-input100 validate-input">
-                    <input class="input100"  id="model-price" name="price" placeholder="Price">
+                    <input class="input100"  id="price" name="price" placeholder="Price">
                 </div>
                 <div class="wrap-input100 validate-input" >
-                    <input class="input100" id="model-amount" name="amount" placeholder="Amount">
+                    <input class="input100" id="amount" name="amount" placeholder="Amount">
                 </div>
                 <div class="container-login100-form-btn">
-                    <input id="btn_add_shoes" type="submit" name="submit" value="Добавить обувь"/>
+                    <button class="login100-form-btn" "id="add-model" type="submit">Добавить обувь</button>
                 </div>
             </form>
         </div>`;
-        document.getElementById('create_model').addEventListener('submit',e=>{
+        document.getElementById('form_model').addEventListener('submit',e=>{
             e.preventDefault();
             managerModule.createModel();
         });
@@ -144,33 +144,54 @@ class ViewModule {
             </div>
             <div class="mid-content">
                 <label for="list models">Список моделей:</label>
-                <select name="list models" id="list-models">
+                <select name="list models" id="select_models">
 
                 </select>
                 <div class="wrap-input100 validate-input" data-validate="Enter name">
-                    <input class="input100" id="model-name" name="modelName" placeholder="Model name">
+                    <input class="input100" id="name" name="name" placeholder="Model name">
                 </div>
-                <div class="wrap-input100 validate-input" data-validate="Enter firm">
-                    <input class="input100" id="model-firm" name="modelFirm" placeholder="Model firm">
+                <div class="wrap-input100 validate-input" data-validate="Enter brand">
+                    <input class="input100" id="brand" name="brand" placeholder="Model brand">
                 </div>
                 <div class="wrap-input100 validate-input" data-validate="Enter size">
-                    <input class="input100" id="model-size" name="modelSize" placeholder="Model size">
+                    <input class="input100" id="size" name="size" placeholder="Model size">
                 </div>
                 <div class="wrap-input100 validate-input" data-validate="Enter price">
-                    <input class="input100" id="model-price" name="price" placeholder="Price">
+                    <input class="input100" id="price" name="price" placeholder="Price">
                 </div>
                 <div class="wrap-input100 validate-input" data-validate="Enter amount">
-                    <input class="input100" id="model-amount" name="amount" placeholder="Amount">
+                    <input class="input100" id="amount" name="amount" placeholder="Amount">
                 </div>
                 <div class="container-login100-form-btn">
                     <button class="login100-form-btn" type="submit" id="edit-model">Изменить</button>
                 </div>
             </div>
         </div>`;
-        const editModel = document.getElementById('edit-model');
-        editModel.addEventListener('click', (e) => {
+        document.getElementById('edit-model').addEventListener('click',(e)=>{
             e.preventDefault();
-            managerModule.editModel();
+            managerModule.changeModel();
+        });
+    }
+    showBuyModel() {
+        const content = document.getElementById('content');
+        content.innerHTML = 
+        `<div class="shoe-edit-container">
+            <div class="top-content">
+                <span class="model-edit-title">Покупка обуви</span>
+            </div>
+            <div class="mid-content">
+                <label for="list models">Список моделей:</label>
+                <select name="list models" id="select_models">
+
+                </select>
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" type="submit" id="buy-shoe">Купить</button>
+                </div>
+            </div>
+        </div>`;
+        document.getElementById('buy-shoe').addEventListener('click',(e)=>{
+            e.preventDefault();
+            userModule.buyShoe();
         });
     }
     showEditRole(){
@@ -236,7 +257,7 @@ class ViewModule {
             
                 <div class="input-container">
                     <img src="Images/money.png" class="input-img"></img>
-                    <input class="input-field" id="money" type="number" placeholder="$" name="money" value="${authUser.money}" required>
+                    <input class="input-field" id="money" type="number" placeholder="Add Money" name="money" value="" required>
                 </div>
             
                 <button type="submit" id="edit_profile">Изменить</button>

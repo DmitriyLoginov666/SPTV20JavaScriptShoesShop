@@ -24,6 +24,7 @@ class AdminModule{
                         
                     });
     }
+
     getUsersMap(){
         let promiseUsersMap = fetch('getUsersMap',{
             method: 'GET',
@@ -139,6 +140,7 @@ class AdminModule{
             select_roles.add(option);
         };
     }
+
 }
 const adminModule = new AdminModule();
 export {adminModule};
